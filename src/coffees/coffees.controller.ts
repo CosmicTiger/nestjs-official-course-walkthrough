@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
   Post,
@@ -10,15 +11,22 @@ import {
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto, UpdateCoffeeDto } from './dto/coffee.dto/coffee.dto';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { REQUEST } from '@nestjs/core';
+import { Request } from 'express';
 
 @Controller('coffees')
 export class CoffeesController {
-  constructor(private readonly coffeesService: CoffeesService) {}
+  constructor(
+    private readonly coffeesService: CoffeesService,
+    @Inject(REQUEST) private readonly request: Request,
+  ) {
+    console.log('CoffeesController instantiated');
+  }
 
   @Get()
-  findAll(@Query() paginationQuery) {
-    // const { limit, offset } = paginationQuery;
-    return this.coffeesService.findAll();
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
+    return this.coffeesService.findAll(paginationQuery);
   }
 
   @Get(':id')
@@ -28,7 +36,6 @@ export class CoffeesController {
 
   @Post()
   create(@Body() createCoffeeDto: CreateCoffeeDto) {
-    console.log(createCoffeeDto instanceof CreateCoffeeDto);
     return this.coffeesService.create(createCoffeeDto);
   }
 
