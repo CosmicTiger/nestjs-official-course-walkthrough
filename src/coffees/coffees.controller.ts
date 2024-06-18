@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Inject,
   Param,
   Patch,
   Post,
@@ -12,20 +11,24 @@ import {
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto, UpdateCoffeeDto } from './dto/coffee.dto/coffee.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
-import { REQUEST } from '@nestjs/core';
-import { Request } from 'express';
+import { Public } from 'src/common/decorators/public.decorator';
+import { Protocol } from 'src/common/decorators/protocol.decorator';
+import { ApiForbiddenResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('coffees')
 @Controller('coffees')
 export class CoffeesController {
-  constructor(
-    private readonly coffeesService: CoffeesService,
-    @Inject(REQUEST) private readonly request: Request,
-  ) {
-    console.log('CoffeesController instantiated');
-  }
+  constructor(private readonly coffeesService: CoffeesService) {}
 
+  @ApiForbiddenResponse({ status: 403, description: 'Forbidden.' })
+  @Public()
   @Get()
-  findAll(@Query() paginationQuery: PaginationQueryDto) {
+  async findAll(
+    @Protocol('https') protocol: string,
+    @Query() paginationQuery: PaginationQueryDto,
+  ) {
+    console.log(protocol);
+    // await new Promise((resolve) => setTimeout(resolve, 5000));
     return this.coffeesService.findAll(paginationQuery);
   }
 

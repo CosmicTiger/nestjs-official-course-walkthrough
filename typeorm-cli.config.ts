@@ -2,7 +2,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import configs from './src/config/app.config';
 import { Coffee } from 'src/coffees/entities/coffee.entity';
 import { Flavor } from 'src/coffees/entities/flavor.entity';
-import { SchemaSync1717796049424 } from 'src/migrations/1717796049424-SchemaSync';
+import { SchemaSync1718407932074 } from 'src/migrations/1718407932074-SchemaSync';
 
 const configurationValues = configs().database.configs;
 
@@ -16,7 +16,7 @@ export default new DataSource({
   password: '1lluvC0ff33&C0d!n5',
   database: configurationValues.database as string,
   entities: [Coffee, Flavor],
-  migrations: [SchemaSync1717796049424],
+  migrations: [SchemaSync1718407932074],
   // entities: ['src/**/*.entity{.ts,.js}'], // where our entities reside
   // migrations: ['src/db/migrations/*{.ts,.js}'], // where our migrations reside
   // entities: ['dist/**/*.entity{.ts,.js}'],

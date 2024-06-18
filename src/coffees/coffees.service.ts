@@ -23,13 +23,17 @@ export class CoffeesService {
 
   findAll(paginationQuery: PaginationQueryDto) {
     const { limit, offset } = paginationQuery;
-    return this.coffeeRepository.find({
-      relations: {
-        flavors: true,
-      },
-      skip: offset,
-      take: limit,
-    });
+    return this.coffeeRepository
+      .find({
+        relations: {
+          flavors: true,
+        },
+        skip: offset,
+        take: limit,
+      })
+      .catch(() => {
+        throw new NotFoundException('Coffees not found');
+      });
   }
 
   async findOne(id: number) {

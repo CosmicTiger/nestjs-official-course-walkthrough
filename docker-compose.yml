@@ -10,3 +10,17 @@ services:
       POSTGRES_USER: illuvcoffee
       POSTGRES_PASSWORD: 1lluvC0ff33&C0d!n5
       POSTGRES_DB: illuvcoffee_db
+    volumes:
+      - ./db:/var/lib/postgresql/data
+
+  test-db:
+    image: postgres
+    restart: always
+    ports:
+      - "5433:5432" # 👈 Note the 5433 port (since we are using 5432 for our regular db)
+    environment:
+      POSTGRES_PASSWORD: pass123
+
+volumes:
+  db:
+    driver: local
