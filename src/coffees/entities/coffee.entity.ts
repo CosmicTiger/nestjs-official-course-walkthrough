@@ -1,37 +1,32 @@
 import { v4 as uuidv4 } from 'uuid';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Flavor } from './flavor.entity';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+// import { Flavor } from './flavor.entity';
 
-@Entity()
-export class Coffee {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ default: uuidv4(), nullable: false })
+@Schema()
+export class Coffee extends Document {
+  @Prop({ default: uuidv4(), nullable: false })
   slug: string;
 
-  @Column()
+  @Prop([String])
   name: string;
 
-  @Column({ nullable: true })
+  @Prop([String])
   description: string;
 
-  @Column()
+  @Prop([String])
   brand: string;
 
-  @Column('boolean', { default: true, name: 'is_active' })
+  @Prop([Boolean])
   is_active: boolean;
 
-  @Column({ default: 0 })
-  recommendation: number;
+  @Prop({ default: 0 })
+  recommendations: number;
 
-  @JoinTable()
-  @ManyToMany(() => Flavor, (flavor) => flavor.coffees, { cascade: true })
-  flavors: Flavor[];
+  @Prop([String])
+  flavors: string[];
+  // @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Flavor' }] })
+  // flavors: Flavor[];
 }
+
+export const CoffeeSchema = SchemaFactory.createForClass(Coffee);

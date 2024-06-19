@@ -39,3 +39,6 @@ lerna-debug.log*
 .env.local
 .env.development
 .env.production
+
+# Docker Compose Special files
+db/**

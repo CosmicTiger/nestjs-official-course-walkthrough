@@ -1,23 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
 
-@Index(['name', 'type'])
-@Entity()
-export class Event {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
+@Schema()
+export class Event extends mongoose.Document {
+  // Note "entity" was removed from the class "name"
+  @Prop()
   type: string;
 
-  @Column()
+  @Prop({ index: true })
   name: string;
 
-  @Column('json')
+  @Prop(mongoose.SchemaTypes.Mixed)
   payload: Record<string, any>;
-
-  @Column('timestamp with time zone', {
-    nullable: false,
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
 }
+
+export const EventSchema = SchemaFactory.createForClass(Event);
+EventSchema.index({ name: 1, type: -1 });
